@@ -1,0 +1,85 @@
+{
+  "adminCredentials": {
+    "username": "hanzala",
+    "password": "hanzala@12431222"
+  },
+  "portfolioInfo": {
+    "owner": "Hanzala",
+    "profession": "MERN Stack Developer",
+    "tagline": "Building Modern, Fast & Scalable Web Applications",
+    "description": "I am a passionate MERN Stack Developer specializing in HTML5, CSS3, Bootstrap, JavaScript, Node.js, Express.js, REST APIs and JSON-based backend systems. I build modern, responsive, animated and high-performance web applications with clean architecture and beautiful UI."
+  },
+  "hero": {
+    "title": "Hi, I'm Hanzala",
+    "subtitle": "A MERN Stack Developer"
+  },
+  "about": {
+    "title": "About Me",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  "skills": [
+    { "name": "HTML5", "level": "90%" },
+    { "name": "CSS3", "level": "85%" },
+    { "name": "Bootstrap 5", "level": "80%" },
+    { "name": "JavaScript ES6", "level": "95%" },
+    { "name": "Node.js", "level": "88%" },
+    { "name": "Express.js", "level": "87%" }
+  ],
+  "projects": [
+    { "id": 1, "name": "Project One", "description": "Description for project one.", "image": "project1.jpg" },
+    { "id": 2, "name": "Project Two", "description": "Description for project two.", "image": "project2.jpg" }
+  ],
+  "services": [
+    { "id": 1, "name": "Web Development", "description": "Building responsive and modern web applications." },
+    { "id": 2, "name": "API Development", "description": "Creating robust and scalable RESTful APIs." }
+  ],
+  "experience": [
+    { "id": 1, "title": "Senior Developer", "company": "Tech Solutions", "years": "2020 - Present" }
+  ],
+  "education": [
+    { "id": 1, "degree": "Master in Computer Science", "university": "University of Example", "years": "2018 - 2020" }
+  ],
+  "certificates": [
+    { "id": 1, "name": "MERN Stack Certification", "issuer": "Online Course" }
+  ],
+  "testimonials": [
+    { "id": 1, "name": "Client One", "feedback": "Hanzala is a great developer!" }
+  ],
+  "statistics": {
+    "clients": 10, "projects": 20, "awards": 5
+  },
+  "resume": "cv.pdf",
+  "socialLinks": {
+    "github": "https://github.com/hanzala",
+    "linkedin": "https://linkedin.com/in/hanzala",
+    "facebook": "https://facebook.com/hanzala",
+    "instagram": "https://instagram.com/hanzala",
+    "twitter": "https://twitter.com/hanzala",
+    "email": "hanzala@example.com",
+    "phone": "+1234567890",
+    "whatsapp": "+1234567890"
+  },
+  "theme": {
+    "colors": {"primary": "#007bff", "secondary": "#6c757d"},
+    "darkMode": false
+  },
+  "favicon": "favicon.ico",
+  "seo": {
+    "metaTitle": "Hanzala - MERN Stack Developer",
+    "metaDescription": "Building Modern, Fast & Scalable Web Applications",
+    "keywords": "MERN, Stack, Developer, Portfolio, Web, Applications"
+  },
+  "navbar": {
+    "sticky": true,
+    "blur": true
+  },
+  "footer": {
+    "text": "© 2026 Hanzala. All rights reserved."
+  },
+  "contactDetails": {
+    "email": "hanzala@example.com",
+    "phone": "+1234567890",
+    "address": "123 Developer St, City, Country"
+  },
+  "messages": []
+}

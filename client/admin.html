@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Portfolio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+      background: var(--dark-bg);
+    }
+
+    .sidebar {
+      width: 250px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem 1rem;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      color: var(--accent);
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-menu a {
+      color: var(--text-light);
+      text-decoration: none;
+      display: block;
+      padding: 0.75rem 1rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: var(--accent);
+      color: var(--dark-bg);
+    }
+
+    .main-content {
+      margin-left: 250px;
+      flex: 1;
+      padding: 2rem;
+      color: var(--text-light);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-header h1 {
+      font-size: 2rem;
+    }
+
+    .logout-btn {
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: var(--dark-bg);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: slideInUp 0.3s ease;
+    }
+
+    .form-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--dark-bg);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-danger {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #ff5252;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th {
+      background: rgba(0, 212, 255, 0.1);
+      padding: 1rem;
+      text-align: left;
+      color: var(--accent);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    table tr:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .success-message,
+    .error-message {
+      padding: 1rem;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .success-message {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+      border: 1px solid #4caf50;
+    }
+
+    .error-message {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      border: 1px solid #ff6b6b;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Admin Panel</h2>
+      <ul class="sidebar-menu">
+        <li><a href="#" class="menu-link active" data-section="dashboard">Dashboard</a></li>
+        <li><a href="#" class="menu-link" data-section="hero">Edit Hero</a></li>
+        <li><a href="#" class="menu-link" data-section="about">Edit About</a></li>
+        <li><a href="#" class="menu-link" data-section="skills">Manage Skills</a></li>
+        <li><a href="#" class="menu-link" data-section="projects">Manage Projects</a></li>
+        <li><a href="#" class="menu-link" data-section="services">Manage Services</a></li>
+        <li><a href="#" class="menu-link" data-section="experience">Manage Experience</a></li>
+        <li><a href="#" class="menu-link" data-section="education">Manage Education</a></li>
+        <li><a href="#" class="menu-link" data-section="testimonials">Manage Testimonials</a></li>
+        <li><a href="#" class="menu-link" data-section="social">Social Links</a></li>
+        <li><a href="#" class="menu-link" data-section="settings">Settings</a></li>
+        <li><a href="#" class="menu-link" data-section="messages">Messages</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <a href="/admin/logout" class="logout-btn">Logout</a>
+      </div>
+
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="section active">
+        <h2>Dashboard</h2>
+        <div class="form-section">
+          <p>Welcome to the Admin Dashboard. Use the menu on the left to manage your portfolio content.</p>
+        </div>
+      </section>
+
+      <!-- Hero Section -->
+      <section id="hero" class="section">
+        <h2>Edit Hero Section</h2>
+        <div class="form-section">
+          <div id="hero-message"></div>
+          <form id="hero-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="hero-title">Title</label>
+                <input type="text" id="hero-title" name="title" required>
+              </div>
+              <div class="form-group">
+                <label for="hero-subtitle">Subtitle</label>
+                <input type="text" id="hero-subtitle" name="subtitle" required>
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="section">
+        <h2>Edit About Section</h2>
+        <div class="form-section">
+          <div id="about-message"></div>
+          <form id="about-form">
+            <div class="form-group">
+              <label for="about-title">Title</label>
+              <input type="text" id="about-title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="about-content">Content</label>
+              <textarea id="about-content" name="content" required></textarea>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="skills" class="section">
+        <h2>Manage Skills</h2>
+        <div class="form-section">
+          <h3>Add New Skill</h3>
+          <div id="skills-message"></div>
+          <form id="skills-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="skill-name">Skill Name</label>
+                <input type="text" id="skill-name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="skill-level">Level (%)</label>
+                <input type="number" id="skill-level" name="level" min="0" max="100" required>
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Add Skill</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-container">
+          <table id="skills-table">
+            <thead>
+              <tr>
+                <th>Skill Name</th>
+                <th>Level</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="projects" class="section">
+        <h2>Manage Projects</h2>
+        <div class="form-section">
+          <h3>Add New Project</h3>
+          <div id="projects-message"></div>
+          <form id="projects-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="project-name">Project Name</label>
+                <input type="text" id="project-name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="project-image">Image URL</label>
+                <input type="text" id="project-image" name="image" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="project-description">Description</label>
+              <textarea id="project-description" name="description" required></textarea>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Add Project</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-container">
+          <table id="projects-table">
+            <thead>
+              <tr>
+                <th>Project Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section id="services" class="section">
+        <h2>Manage Services</h2>
+        <div class="form-section">
+          <h3>Add New Service</h3>
+          <div id="services-message"></div>
+          <form id="services-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="service-name">Service Name</label>
+                <input type="text" id="service-name" name="name" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="service-description">Description</label>
+              <textarea id="service-description" name="description" required></textarea>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Add Service</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-container">
+          <table id="services-table">
+            <thead>
+              <tr>
+                <th>Service Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Experience Section -->
+      <section id="experience" class="section">
+        <h2>Manage Experience</h2>
+        <div class="form-section">
+          <h3>Add New Experience</h3>
+          <div id="experience-message"></div>
+          <form id="experience-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="exp-title">Job Title</label>
+                <input type="text" id="exp-title" name="title" required>
+              </div>
+              <div class="form-group">
+                <label for="exp-company">Company</label>
+                <input type="text" id="exp-company" name="company" required>
+              </div>
+              <div class="form-group">
+                <label for="exp-years">Years</label>
+                <input type="text" id="exp-years" name="years" required>
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Add Experience</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-container">
+          <table id="experience-table">
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Years</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Education Section -->
+      <section id="education" class="section">
+        <h2>Manage Education</h2>
+        <div class="form-section">
+          <h3>Add New Education</h3>
+          <div id="education-message"></div>
+          <form id="education-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="edu-degree">Degree</label>
+                <input type="text" id="edu-degree" name="degree" required>
+              </div>
+              <div class="form-group">
+                <label for="edu-university">University</label>
+                <input type="text" id="edu-university" name="university" required>
+              </div>
+              <div class="form-group">
+                <label for="edu-years">Years</label>
+                <input type="text" id="edu-years" name="years" required>
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Add Education</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-container">
+          <table id="education-table">
+            <thead>
+              <tr>
+                <th>Degree</th>
+                <th>University</th>
+                <th>Years</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section id="testimonials" class="section">
+        <h2>Manage Testimonials</h2>
+        <div class="form-section">
+          <h3>Add New Testimonial</h3>
+          <div id="testimonials-message"></div>
+          <form id="testimonials-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="testimonial-name">Client Name</label>
+                <input type="text" id="testimonial-name" name="name" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="testimonial-feedback">Feedback</label>
+              <textarea id="testimonial-feedback" name="feedback" required></textarea>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Add Testimonial</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-container">
+          <table id="testimonials-table">
+            <thead>
+              <tr>
+                <th>Client Name</th>
+                <th>Feedback</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Social Links Section -->
+      <section id="social" class="section">
+        <h2>Social Links</h2>
+        <div class="form-section">
+          <div id="social-message"></div>
+          <form id="social-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="social-github">GitHub</label>
+                <input type="url" id="social-github" name="github" required>
+              </div>
+              <div class="form-group">
+                <label for="social-linkedin">LinkedIn</label>
+                <input type="url" id="social-linkedin" name="linkedin" required>
+              </div>
+              <div class="form-group">
+                <label for="social-facebook">Facebook</label>
+                <input type="url" id="social-facebook" name="facebook" required>
+              </div>
+              <div class="form-group">
+                <label for="social-instagram">Instagram</label>
+                <input type="url" id="social-instagram" name="instagram" required>
+              </div>
+              <div class="form-group">
+                <label for="social-twitter">Twitter</label>
+                <input type="url" id="social-twitter" name="twitter" required>
+              </div>
+              <div class="form-group">
+                <label for="social-email">Email</label>
+                <input type="email" id="social-email" name="email" required>
+              </div>
+              <div class="form-group">
+                <label for="social-phone">Phone</label>
+                <input type="tel" id="social-phone" name="phone" required>
+              </div>
+              <div class="form-group">
+                <label for="social-whatsapp">WhatsApp</label>
+                <input type="tel" id="social-whatsapp" name="whatsapp" required>
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Save Social Links</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="settings" class="section">
+        <h2>Settings</h2>
+        <div class="form-section">
+          <h3>Site Settings</h3>
+          <div id="settings-message"></div>
+          <form id="settings-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="settings-meta-title">Meta Title</label>
+                <input type="text" id="settings-meta-title" name="metaTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="settings-meta-description">Meta Description</label>
+                <input type="text" id="settings-meta-description" name="metaDescription" required>
+              </div>
+              <div class="form-group">
+                <label for="settings-keywords">Keywords</label>
+                <input type="text" id="settings-keywords" name="keywords" required>
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Messages Section -->
+      <section id="messages" class="section">
+        <h2>Contact Messages</h2>
+        <div class="table-container">
+          <table id="messages-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Menu Navigation
+    document.querySelectorAll('.menu-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        link.classList.add('active');
+        const sectionId = link.getAttribute('data-section');
+        document.getElementById(sectionId).classList.add('active');
+        loadSectionData(sectionId);
+      });
+    });
+
+    // Load Section Data
+    async function loadSectionData(sectionId) {
+      if (sectionId === 'hero') {
+        const data = await api.getHero();
+        document.getElementById('hero-title').value = data.title || '';
+        document.getElementById('hero-subtitle').value = data.subtitle || '';
+      } else if (sectionId === 'about') {
+        const data = await api.getAbout();
+        document.getElementById('about-title').value = data.title || '';
+        document.getElementById('about-content').value = data.content || '';
+      } else if (sectionId === 'skills') {
+        loadSkills();
+      } else if (sectionId === 'projects') {
+        loadProjects();
+      } else if (sectionId === 'services') {
+        loadServices();
+      } else if (sectionId === 'experience') {
+        loadExperience();
+      } else if (sectionId === 'education') {
+        loadEducation();
+      } else if (sectionId === 'testimonials') {
+        loadTestimonials();
+      } else if (sectionId === 'social') {
+        loadSocialLinks();
+      } else if (sectionId === 'settings') {
+        loadSettings();
+      } else if (sectionId === 'messages') {
+        loadMessages();
+      }
+    }
+
+    // Load Skills
+    async function loadSkills() {
+      const skills = await api.getSkills();
+      const tbody = document.querySelector('#skills-table tbody');
+      tbody.innerHTML = '';
+      skills.forEach(skill => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${skill.name}</td>
+          <td>${skill.level}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteSkill(${skill.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteSkill(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteSkill(id);
+        loadSkills();
+      }
+    }
+
+    // Hero Form Submission
+    document.getElementById('hero-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        title: document.getElementById('hero-title').value,
+        subtitle: document.getElementById('hero-subtitle').value
+      };
+      await api.updateHero(data);
+      showMessage('hero-message', 'Hero section updated successfully!');
+    });
+
+    // About Form Submission
+    document.getElementById('about-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        title: document.getElementById('about-title').value,
+        content: document.getElementById('about-content').value
+      };
+      await api.updateAbout(data);
+      showMessage('about-message', 'About section updated successfully!');
+    });
+
+    // Skills Form Submission
+    document.getElementById('skills-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('skill-name').value,
+        level: document.getElementById('skill-level').value + '%'
+      };
+      await api.addSkill(data);
+      document.getElementById('skills-form').reset();
+      loadSkills();
+      showMessage('skills-message', 'Skill added successfully!');
+    });
+
+    // Projects Form Submission
+    document.getElementById('projects-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('project-name').value,
+        image: document.getElementById('project-image').value,
+        description: document.getElementById('project-description').value
+      };
+      await api.addProject(data);
+      document.getElementById('projects-form').reset();
+      loadProjects();
+      showMessage('projects-message', 'Project added successfully!');
+    });
+
+    // Services Form Submission
+    document.getElementById('services-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('service-name').value,
+        description: document.getElementById('service-description').value
+      };
+      await api.addService(data);
+      document.getElementById('services-form').reset();
+      loadServices();
+      showMessage('services-message', 'Service added successfully!');
+    });
+
+    // Experience Form Submission
+    document.getElementById('experience-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        title: document.getElementById('exp-title').value,
+        company: document.getElementById('exp-company').value,
+        years: document.getElementById('exp-years').value
+      };
+      await api.addExperience(data);
+      document.getElementById('experience-form').reset();
+      loadExperience();
+      showMessage('experience-message', 'Experience added successfully!');
+    });
+
+    // Education Form Submission
+    document.getElementById('education-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        degree: document.getElementById('edu-degree').value,
+        university: document.getElementById('edu-university').value,
+        years: document.getElementById('edu-years').value
+      };
+      await api.addEducation(data);
+      document.getElementById('education-form').reset();
+      loadEducation();
+      showMessage('education-message', 'Education added successfully!');
+    });
+
+    // Testimonials Form Submission
+    document.getElementById('testimonials-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('testimonial-name').value,
+        feedback: document.getElementById('testimonial-feedback').value
+      };
+      await api.addTestimonial(data);
+      document.getElementById('testimonials-form').reset();
+      loadTestimonials();
+      showMessage('testimonials-message', 'Testimonial added successfully!');
+    });
+
+    // Social Links Form Submission
+    document.getElementById('social-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        github: document.getElementById('social-github').value,
+        linkedin: document.getElementById('social-linkedin').value,
+        facebook: document.getElementById('social-facebook').value,
+        instagram: document.getElementById('social-instagram').value,
+        twitter: document.getElementById('social-twitter').value,
+        email: document.getElementById('social-email').value,
+        phone: document.getElementById('social-phone').value,
+        whatsapp: document.getElementById('social-whatsapp').value
+      };
+      await api.updateSocialLinks(data);
+      showMessage('social-message', 'Social links updated successfully!');
+    });
+
+    // Settings Form Submission
+    document.getElementById('settings-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        seo: {
+          metaTitle: document.getElementById('settings-meta-title').value,
+          metaDescription: document.getElementById('settings-meta-description').value,
+          keywords: document.getElementById('settings-keywords').value
+        }
+      };
+      await api.updateSettings(data);
+      showMessage('settings-message', 'Settings updated successfully!');
+    });
+
+    // Load Projects
+    async function loadProjects() {
+      const projects = await api.getProjects();
+      const tbody = document.querySelector('#projects-table tbody');
+      tbody.innerHTML = '';
+      projects.forEach(project => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${project.name}</td>
+          <td>${project.description}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteProject(${project.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteProject(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteProject(id);
+        loadProjects();
+      }
+    }
+
+    // Load Services
+    async function loadServices() {
+      const services = await api.getServices();
+      const tbody = document.querySelector('#services-table tbody');
+      tbody.innerHTML = '';
+      services.forEach(service => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${service.name}</td>
+          <td>${service.description}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteService(${service.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteService(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteService(id);
+        loadServices();
+      }
+    }
+
+    // Load Experience
+    async function loadExperience() {
+      const experience = await api.getExperience();
+      const tbody = document.querySelector('#experience-table tbody');
+      tbody.innerHTML = '';
+      experience.forEach(exp => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${exp.title}</td>
+          <td>${exp.company}</td>
+          <td>${exp.years}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteExperience(${exp.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteExperience(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteExperience(id);
+        loadExperience();
+      }
+    }
+
+    // Load Education
+    async function loadEducation() {
+      const education = await api.getEducation();
+      const tbody = document.querySelector('#education-table tbody');
+      tbody.innerHTML = '';
+      education.forEach(edu => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${edu.degree}</td>
+          <td>${edu.university}</td>
+          <td>${edu.years}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteEducation(${edu.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteEducation(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteEducation(id);
+        loadEducation();
+      }
+    }
+
+    // Load Testimonials
+    async function loadTestimonials() {
+      const testimonials = await api.getTestimonials();
+      const tbody = document.querySelector('#testimonials-table tbody');
+      tbody.innerHTML = '';
+      testimonials.forEach(testimonial => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${testimonial.name}</td>
+          <td>${testimonial.feedback}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteTestimonial(${testimonial.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteTestimonial(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteTestimonial(id);
+        loadTestimonials();
+      }
+    }
+
+    // Load Social Links
+    async function loadSocialLinks() {
+      const social = await api.getSocialLinks();
+      document.getElementById('social-github').value = social.github || '';
+      document.getElementById('social-linkedin').value = social.linkedin || '';
+      document.getElementById('social-facebook').value = social.facebook || '';
+      document.getElementById('social-instagram').value = social.instagram || '';
+      document.getElementById('social-twitter').value = social.twitter || '';
+      document.getElementById('social-email').value = social.email || '';
+      document.getElementById('social-phone').value = social.phone || '';
+      document.getElementById('social-whatsapp').value = social.whatsapp || '';
+    }
+
+    // Load Settings
+    async function loadSettings() {
+      const settings = await api.getSettings();
+      document.getElementById('settings-meta-title').value = settings.seo.metaTitle || '';
+      document.getElementById('settings-meta-description').value = settings.seo.metaDescription || '';
+      document.getElementById('settings-keywords').value = settings.seo.keywords || '';
+    }
+
+    // Load Messages
+    async function loadMessages() {
+      const messages = await api.getMessages();
+      const tbody = document.querySelector('#messages-table tbody');
+      tbody.innerHTML = '';
+      messages.forEach(message => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${message.name}</td>
+          <td>${message.email}</td>
+          <td>${message.subject}</td>
+          <td>${message.message}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteMessage(${message.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    async function deleteMessage(id) {
+      if (confirm('Are you sure?')) {
+        await api.deleteMessage(id);
+        loadMessages();
+      }
+    }
+
+    // Show Message
+    function showMessage(elementId, message) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.classList.add('success-message');
+      element.style.display = 'block';
+      setTimeout(() => {
+        element.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
